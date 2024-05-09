@@ -6,15 +6,16 @@ let ruleSet;
 let w = 4;
 let ruleCollection = [9, 30, 45, 58, 60, 69, 105, 110, 129, 169, 182, 195, 219, 225];
 
+// 4/21/24 Additions
+let video;
 
 function chooseRuleSet(n) {
   return parseInt(n, 10).toString(2).padStart(8, "0");
 }
 
 function setup() {
-  // We want an odd # of cells.
-  createCanvas(710, 500);
-  background(220);
+  createCanvas(500, 500);
+  clear();
   ruleSet = chooseRuleSet(random(ruleCollection))
   let total = width / w;
   palette = [
@@ -33,18 +34,31 @@ function setup() {
   for (let i = 0; i < total; i++) {
     cells[i] = random(palette);
   }
+
+  // 4/21/24 Addititons
+  pixelDensity(1);
+  video = createCapture(VIDEO);
+  video.size(320, 240)
 }
 
 function draw() {
+  // 4/21/24 Additions
+  video.loadPixels();
+  let vidWidth = video.width;
+  let vidHeight = video.height;
+  copy(video, 0, 0, vidWidth, vidHeight, 0, 0, 710, 500);
+
   history.push(cells);
 
   // Drawing logic.
   let y = 0;
+  tint(255, 128);
   background(255);
   for(let cells of history) {
     for (let i = 0; i < cells.length; i++) {
       let x = i * w;
       noStroke();
+      tint(255, 128);
       fill(cells[i]);
       square(x, y - w, w);
     }
